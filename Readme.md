@@ -2,7 +2,7 @@
 
 ## Introduction
 
-This repository contains codes and models for Persian language fine-tuning of `Gemma2` model. The fine-tuning is done in three different teqniques: P-Tuning, QLoRA and Traditional fine-tuning. The models can be downloaded and used from my hugging face model hub [here](https://huggingface.co/AliHamzeh)
+This repository contains codes and models for Persian language fine-tuning of [Gemma2 2B instruct](https://huggingface.co/google/gemma-2-2b-it) model. The fine-tuning is done in three different teqniques: P-Tuning, QLoRA and Traditional fine-tuning. The models can be downloaded and used from my hugging face model hub [here](https://huggingface.co/AliHamzeh)
 
 ## Dataset
 
@@ -63,11 +63,13 @@ assistant:
 ```
 
 ## P-Tuning
-P-Tuning (Prompt Tuning) is a technique used to adapt pre-trained language models to specific tasks by fine-tuning the model's input prompts rather than modifying the model's parameters directly. Instead of adjusting the entire model, P-Tuning focuses on learning small, task-specific prompt embeddings that guide the model's behavior for a given task, such as classification, generation, or question-answering. This allows for efficient task adaptation with fewer parameters and less computational overhead compared to traditional fine-tuning methods. By learning an optimal set of prompt tokens, P-Tuning leverages the knowledge already encoded in the pre-trained model while enhancing its performance on downstream tasks.
+P-Tuning is a technique used to adapt pre-trained language models to specific tasks by fine-tuning the model's input prompts rather than modifying the model's parameters directly. Instead of adjusting the entire model, P-Tuning focuses on learning small, task-specific prompt embeddings that guide the model's behavior for a given task, such as classification, generation, or question-answering. This allows for efficient task adaptation with fewer parameters and less computational overhead compared to traditional fine-tuning methods. By learning an optimal set of prompt tokens, P-Tuning leverages the knowledge already encoded in the pre-trained model while enhancing its performance on downstream tasks.
+
+![P-Tuning](imgs/p-tuning.jpg)
 
 We p-tuned Gemma2 on `CAUSAL_LM` task with given config:
 
-```
+```python
 tuning_config = PromptEncoderConfig(
 	task_type=TaskType.CAUSAL_LM,
 	num_virtual_tokens=20,
@@ -121,7 +123,7 @@ assistant
 The model can be downloaded from [here](https://huggingface.co/AliHamzeh/gemma2-2b-it-persian-p-tuned).
 `transformers` and `peft` currently don't support directly loading models that were trained using soft-prompt methods. Instead, you can use the model with like this:
 
-```
+```python
 from transformers import AutoTokenizer, AutoModelForCausalLM
 from peft import PeftModel
 
@@ -135,9 +137,12 @@ Also keep in mind that you should set `use_cache=False` when calling `generate` 
 ## QLoRA
 QLoRA (Quantized Low-Rank Adaptation) is an advanced technique in machine learning that enhances the efficiency of fine-tuning large language models by combining quantization and low-rank adaptation. It builds on LoRA (Low-Rank Adaptation), which reduces the number of trainable parameters by approximating weight updates with low-rank matrices, making fine-tuning faster and less resource-intensive. QLoRA takes this further by quantizing the model's weights—typically to 4-bit or 8-bit precision—reducing memory usage while maintaining performance. This allows fine-tuning on resource-constrained hardware, like consumer GPUs, without significant accuracy loss. By leveraging quantization to compress the pretrained model and applying LoRA to adapt it efficiently, QLoRA strikes a balance between computational efficiency and model quality, making it particularly useful for deploying large models in practical applications.
 
+![P-Tuning](imgs/qlora.jpg)
+
+
 We finetuned the model with QLoRA method with given config:
 
-```
+```python
 peft_config = LoraConfig(
     r=8,
     lora_alpha=16,
@@ -208,7 +213,7 @@ assistant
 The model can be downloaded from [here](https://huggingface.co/AliHamzeh/gemma2-2b-it-qlora-persian-finetuned).
 You can use the model with `transformers` library:
 
-```
+```python
 from transformers import AutoTokenizer, AutoModelForCausalLM
 
 TOKENIZER_ID = "philschmid/gemma-tokenizer-chatml"
@@ -282,7 +287,7 @@ The model can be downloaded from [here](https://huggingface.co/AliHamzeh/gemma2-
 
 You can use the model with `transformers` library:
 
-```
+```python
 from transformers import AutoTokenizer, AutoModelForCausalLM
 
 TOKENIZER_ID = "philschmid/gemma-tokenizer-chatml"
