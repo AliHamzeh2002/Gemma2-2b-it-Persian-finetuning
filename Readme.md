@@ -319,7 +319,7 @@ model = AutoModelForCausalLM.from_pretrained(
 | QLoRA                  | 8 hours       | Kaggle's T4x2  | 100%      | Best                   |
 | Traditional Fine-tuning| 8.5 hours       | Kaggle's T4x2  | 20%       | Moderate               |
 
-# Contributors
+## Contributors
 * [Ali Hamzehpour](https://github.com/AliHamzeh2002)
 * [Mina Shirazi](https://github.com/meenashrz)
 
